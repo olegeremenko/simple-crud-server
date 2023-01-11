@@ -1,13 +1,13 @@
-import dotenv from 'dotenv';
-import HttpServer from './src/server';
-import HttpMethod from './src/http/methods';
-import userController from './src/user/user-controller';
-import ErrorHandler from './src/errors/error-handler';
-import Router from './src/router';
+import * as dotenv from 'dotenv';
+import HttpServer from './server';
+import HttpMethod from './http/methods';
+import userController from './user/user-controller';
+import ErrorHandler from './errors/error-handler';
+import Router from './router';
 
 dotenv.config();
 
-const port: number = Number(process.env.SERVER_PORT);
+const port: number = Number(process.env['SERVER_PORT']);
 
 process.on('unhandledRejection', (reason) => {
     // The error will be handled by the 'uncaughtException' handler.
