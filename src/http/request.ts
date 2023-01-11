@@ -1,5 +1,6 @@
 import { IncomingMessage } from 'node:http';
 import HttpMethod from './methods';
+import ArgumentValidateError from "../errors/argument-validate-error";
 
 class Request extends IncomingMessage {
     private body: string | undefined;
@@ -68,11 +69,14 @@ class Request extends IncomingMessage {
     }
 
     public getJsonBody() {
-        if (this.body) {
-            return JSON.parse(this.body);
+        try {
+            if (this.body) {
+                return JSON.parse(this.body);
+            }
+        } catch (error) {
         }
 
-        throw new Error('Invalid JSON');
+        throw new ArgumentValidateError('Invalid JSON');
     }
 }
 

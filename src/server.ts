@@ -55,6 +55,10 @@ class HttpServer {
         this.server.listen(port);
     }
 
+    public getServer(): ReturnType<typeof http.createServer> {
+        return this.server;
+    }
+
     private prepareAndSendRequest(actionResult: ActionResult, response: Response): void {
         response.json({
             result: actionResult.actionResult

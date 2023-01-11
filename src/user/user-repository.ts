@@ -33,7 +33,10 @@ class UserRepository {
 
     public async delete(id: string): Promise<boolean> {
         return await this.dataStorage.remove('id', id);
+    }
 
+    public async clearAll(): Promise<void> {
+        await this.dataStorage.clear();
     }
 }
 

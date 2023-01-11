@@ -1,9 +1,6 @@
 import * as dotenv from 'dotenv';
-import HttpServer from './server';
-import HttpMethod from './http/methods';
-import userController from './user/user-controller';
 import ErrorHandler from './errors/error-handler';
-import Router from './router';
+import { buildSingleNodeServer } from './server-builder';
 
 dotenv.config();
 
@@ -18,17 +15,5 @@ process.on('uncaughtException', (error) => {
     ErrorHandler.handle(error);
 });
 
-Router.add(HttpMethod.GET, '/api/users', userController.list);
-Router.add(HttpMethod.POST, '/api/users', userController.create);
-Router.add(HttpMethod.GET, '/api/users/{id}', userController.getById);
-Router.add(HttpMethod.PUT, '/api/users/{id}', userController.update);
-Router.add(HttpMethod.DELETE, '/api/users/{id}', userController.delete);
+buildSingleNodeServer().listen(port);
 
-const server = new HttpServer();
-server.listen(port);
-
-// if (isMultiNode) {
-    // createMultiNodeApplication(port);
-// } else {
-    // createApplication().listen(port);
-// }
