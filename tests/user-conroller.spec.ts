@@ -3,10 +3,13 @@ import { constants as httpConstants } from 'node:http2';
 import UserDto from "../src/user/user-dto";
 import { userRepository } from "../src/user/user-repository";
 import { beforeEach, describe, expect, it } from "@jest/globals";
-import * as supertest from "supertest";
-import { buildSingleNodeServer } from '../src/server-builder';
+import supertest from "supertest";
+import HttpServer from "../src/server";
+import initRouting from "../src/routing";
 
-const server = buildSingleNodeServer();
+initRouting();
+
+const server = new HttpServer();
 const serverTest = supertest(server.getServer());
 
 beforeEach(() => {
@@ -54,7 +57,7 @@ describe('POST /users', () => {
         const response = await serverTest.post('/api/users').send('invalid json');
 
         expect(response.status).toBe(httpConstants.HTTP_STATUS_BAD_REQUEST);
-        expect(response.body).toEqual({
+        expect(response.body.result).toEqual({
             message: 'Invalid JSON'
         });
     });

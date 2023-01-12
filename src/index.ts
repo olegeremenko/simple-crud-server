@@ -1,6 +1,8 @@
 import * as dotenv from 'dotenv';
 import ErrorHandler from './errors/error-handler';
-import { buildSingleNodeServer } from './server-builder';
+import buildSingleNodeServer from './app-builders/single-node-server-builder';
+import parseArgs from "./args-parser";
+import buildMultiNodeServer from './app-builders/multi-node-server-builder';
 
 dotenv.config();
 
@@ -15,5 +17,12 @@ process.on('uncaughtException', (error) => {
     ErrorHandler.handle(error);
 });
 
-buildSingleNodeServer().listen(port);
+const args = parseArgs();
+const multiNode = args['multi-node'] ?? false;
+
+if (multiNode) {
+    buildMultiNodeServer(port);
+} else {
+    buildSingleNodeServer(port);
+}
 

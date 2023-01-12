@@ -3,6 +3,7 @@ import { IDataStorage } from '../storage/data-storage';
 import { InMemoryDatabase } from '../storage/in-memory-database';
 import UserDto from './user-dto';
 import { User } from './user-entity';
+import MasterProcessDatabase from "../storage/master-database";
 
 class UserRepository {
     private dataStorage: IDataStorage<User>;
@@ -27,8 +28,8 @@ class UserRepository {
 
     public async update(id: string, userDto: UserDto): Promise<User> {
         const user = new User(userDto.username, userDto.age, userDto.hobbies, id);
-        const result = await this.dataStorage.update('id', id, user);
-        return result;
+
+        return await this.dataStorage.update('id', id, user);
     }
 
     public async delete(id: string): Promise<boolean> {
@@ -40,9 +41,7 @@ class UserRepository {
     }
 }
 
-// const dataStorage = cluster.isWorker ? new MasterProcessDatabase() : new InMemoryDatabase<User>();
-
-const dataStorage = new InMemoryDatabase<User>();
+const dataStorage = cluster.isWorker ? new MasterProcessDatabase() : new InMemoryDatabase<User>();
 const userRepository = new UserRepository(dataStorage);
 
 export { userRepository, UserRepository };

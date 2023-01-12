@@ -6,6 +6,7 @@
   "scripts": {
     "start:dev": "nodemon",
     "start:prod": "webpack --mode=production --node-env=production && node dist/main.js",
+    "start:multi": "nodemon -- --multi-node=1",
     "test": "jest"
   },
   "engines": {
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@jest/globals": "^29.3.1",
     "@types/http-server": "^0.12.1",
+    "@types/node": "^18.11.18",
     "@types/supertest": "^2.0.12",
     "@types/uuid": "^9.0.0",
     "@webpack-cli/generators": "^3.0.1",
