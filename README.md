@@ -2,13 +2,25 @@
 
 ## Install the application
 
-Clone from the repository and run
+Clone from the repository
+
+```bash
+git clone git@github.com:olegeremenko/simple-crud-server.git
+```
+
+Checkout to develop branch
+
+```bash
+git checkout develop
+```
+
+Setup dependencies with
 
 ```bash
 npm ci
 ```
 
-Copy `.env.example` to `.env` and update the port value if needed.
+Copy `.env.example` to `.env` and update the port value if needed
 
 ## Run the application
 
@@ -27,24 +39,20 @@ Copy `.env.example` to `.env` and update the port value if needed.
    npm run start:prod
    ```
 
-   This command will build the application using `webpack` to the `build/bundle.js` file and run it.
+   This command will build the application using `webpack` to the `dist/index.js` file and run it.
 
 
-3. Multi-node `Cluster` environment:
+3. Multi-node mode with load balancer:
 
     ```bash
     npm run start:multi
     ```
 
-    This command will create 1 master process and `N` workers in a cluster, where `N` is the number of logical CPU cores.
+    This command will create master process and number of workers according to host machine cpu cores.
 
-    Master node will start on `API_PORT` from `.env` file and workers will start on `API_PORT + %worker_index%` port.
-
-    Workers will use the in-memory database, located in master process.
+    Master node will start on `SERVER_PORT` from `.env` and workers will start on `SERVER_PORT + worker_id` port.
 
     Master process load balances requests between workers using `Round Robin` algorithm.
-
-    By default, load balancer will run on `http://localhost:4000/api/users`.
 
 ## Test the application
 
@@ -53,4 +61,3 @@ npm run test
 ```
 
 This command will run the application tests using `jest` package: unit and functional tests will be executed in a single-node environment.
-
