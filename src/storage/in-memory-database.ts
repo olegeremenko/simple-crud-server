@@ -3,6 +3,10 @@ import { IDataStorage } from "./data-storage";
 class InMemoryDatabase<T> implements IDataStorage<T> {
     private items: T[] = [];
 
+    private getIndex(key: keyof T, value: any): number {
+        return this.items.findIndex((item) => item[key] === value);
+    }
+
     public async get(key: keyof T, value: any): Promise<any> {
         return this.items.find((item) => item[key] === value);
     }
@@ -12,25 +16,23 @@ class InMemoryDatabase<T> implements IDataStorage<T> {
     }
 
     public async update(key: keyof T, value: any, updatedItem: T): Promise<T> {
-        this.items = this.items.map((item: T): T => {
-            if (item[key] === value) {
-                return updatedItem;
-            }
+        const itemIndex = this.getIndex(key, value);
 
-            return item;
-        });
+        if (itemIndex !== -1) {
+            this.items[itemIndex] = updatedItem;
+        }
 
         return updatedItem;
     }
 
     public async remove(key: keyof T, value: any): Promise<boolean> {
-        const item = await this.get(key, value);
+        const itemIndex = this.getIndex(key, value);
 
-        if (!item) {
+        if (itemIndex === -1) {
             return false;
         }
 
-        this.items = this.items.filter((item: T) => item[key] !== value);
+        this.items.splice(itemIndex, 1);
 
         return true;
     }
